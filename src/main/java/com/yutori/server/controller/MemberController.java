@@ -1,6 +1,8 @@
 package com.yutori.server.controller;
 
+import com.yutori.server.dto.ReqLoginDto;
 import com.yutori.server.dto.ReqSignupDto;
+import com.yutori.server.dto.ResLoginDto;
 import com.yutori.server.dto.ResSignupDto;
 import com.yutori.server.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,11 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<ResSignupDto> signup(@RequestBody ReqSignupDto reqSignupDto) {
         return new ResponseEntity<>(memberService.signup(reqSignupDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResLoginDto> login(@RequestBody ReqLoginDto reqLoginDto) {
+        return new ResponseEntity<>(memberService.login(reqLoginDto), HttpStatus.OK);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.yutori.server.service.impl;
 
 import com.yutori.server.domain.Member;
+import com.yutori.server.dto.ReqLoginDto;
 import com.yutori.server.dto.ReqSignupDto;
+import com.yutori.server.dto.ResLoginDto;
 import com.yutori.server.dto.ResSignupDto;
 import com.yutori.server.exception.MemberAlreadyException;
 import com.yutori.server.exception.MemberNotFoundException;
@@ -34,5 +36,19 @@ public class MemberServiceImpl implements MemberService {
         resSignupDto.setId(member.getId());
         resSignupDto.setToken(token.getToken());
         return resSignupDto;
+    }
+
+    @Override
+    public ResLoginDto login(ReqLoginDto reqLoginDto) {
+
+        Member member = memberRepository.findByUserIdAndUserPw(reqLoginDto.getUserId(), reqLoginDto.getUserPw()).orElseThrow(MemberNotFoundException::new);
+
+        JwtService.TokenRes token = new JwtService.TokenRes(jwtService.create(member.getId()));
+
+        ResLoginDto resLoginDto = new ResLoginDto();
+        resLoginDto.setId(member.getId());
+        resLoginDto.setToken(token.getToken());
+        return resLoginDto;
+
     }
 }
