@@ -1,4 +1,4 @@
 package com.yutori.server.service;
 
-public interface UserService {
+public interface MemberService {
 }
