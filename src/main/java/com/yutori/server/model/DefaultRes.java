@@ -8,6 +8,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class DefaultRes<T> {
+
     private String message;
 
     private T data;
@@ -24,7 +25,9 @@ public class DefaultRes<T> {
     public static<T> DefaultRes<T> res(final String message, final T t) {
         return DefaultRes.<T>builder()
                 .data(t)
+
                 .message(message)
                 .build();
     }
+
 }
