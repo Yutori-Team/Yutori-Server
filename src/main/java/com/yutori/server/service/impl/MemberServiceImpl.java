@@ -24,10 +24,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResSignupDto signup(ReqSignupDto reqSignupDto) {
-        if(memberRepository.findByUserId(reqSignupDto.getId()).isPresent()){
-            throw new MemberAlreadyException();
-        }
-
         Member member = Member.from(reqSignupDto);
         memberRepository.save(member);
 
@@ -40,7 +36,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResLoginDto login(ReqLoginDto reqLoginDto) {
-
         Member member = memberRepository.findByUserIdAndUserPw(reqLoginDto.getUserId(), reqLoginDto.getUserPw()).orElseThrow(MemberNotFoundException::new);
 
         JwtService.TokenRes token = new JwtService.TokenRes(jwtService.create(member.getId()));
@@ -49,6 +44,14 @@ public class MemberServiceImpl implements MemberService {
         resLoginDto.setId(member.getId());
         resLoginDto.setToken(token.getToken());
         return resLoginDto;
-
     }
+
+    @Override
+    public void checkId(String id) {
+        if(memberRepository.findByUserId(id).isPresent()){
+            throw new MemberAlreadyException();
+        }
+    }
+
+
 }
