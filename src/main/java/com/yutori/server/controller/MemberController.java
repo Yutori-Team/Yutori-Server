@@ -5,6 +5,7 @@ import com.yutori.server.dto.ReqSignupDto;
 import com.yutori.server.dto.ResLoginDto;
 import com.yutori.server.dto.ResSignupDto;
 import com.yutori.server.service.MemberService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,16 +20,19 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @ApiOperation("회원을 생성합니다.")
     @PostMapping("/signup")
     public ResponseEntity<ResSignupDto> signup(@RequestBody ReqSignupDto reqSignupDto) {
         return new ResponseEntity<>(memberService.signup(reqSignupDto), HttpStatus.OK);
     }
 
+    @ApiOperation("로그인하여 토큰을 발급받습니다.")
     @PostMapping("/login")
     public ResponseEntity<ResLoginDto> login(@RequestBody ReqLoginDto reqLoginDto) {
         return new ResponseEntity<>(memberService.login(reqLoginDto), HttpStatus.OK);
     }
 
+    @ApiOperation("아이디를 중복체크합니다.")
     @GetMapping("/checkId")
     public ResponseEntity<String> checkId(@RequestParam String id) {
         memberService.checkId(id);
