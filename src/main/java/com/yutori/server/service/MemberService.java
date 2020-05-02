@@ -8,4 +8,5 @@ import com.yutori.server.dto.ResSignupDto;
 public interface MemberService {
     ResSignupDto signup(ReqSignupDto reqSignupDto);
     ResLoginDto login(ReqLoginDto reqLoginDto);
+    void checkId(String id);
 }

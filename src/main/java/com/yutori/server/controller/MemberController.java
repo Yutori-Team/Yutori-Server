@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -30,6 +27,12 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<ResLoginDto> login(@RequestBody ReqLoginDto reqLoginDto) {
         return new ResponseEntity<>(memberService.login(reqLoginDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/checkId")
+    public ResponseEntity<String> checkId(@RequestParam String id) {
+        memberService.checkId(id);
+        return new ResponseEntity<>("id check success", HttpStatus.OK);
     }
 
 }
