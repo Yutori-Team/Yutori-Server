@@ -30,6 +30,9 @@ dependencies {
     compile group: 'com.auth0', name: 'java-jwt', version: '3.7.0'
     compile "io.springfox:springfox-swagger2:2.9.2"
     compile "io.springfox:springfox-swagger-ui:2.9.2"
+
+    compile group: 'com.opencsv', name: 'opencsv', version: '4.4'
+
 }
 
 test {
