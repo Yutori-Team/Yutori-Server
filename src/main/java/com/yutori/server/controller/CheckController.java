@@ -1,9 +1,6 @@
 package com.yutori.server.controller;
 
-import com.yutori.server.dto.LevelTypes;
-import com.yutori.server.dto.NumTypes;
-import com.yutori.server.dto.ResSentenceListDto;
-import com.yutori.server.dto.SentenceTypes;
+import com.yutori.server.dto.*;
 import com.yutori.server.service.CheckService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,8 +22,8 @@ public class CheckController {
     @ApiOperation("")
     @GetMapping("/getSentence")
     public ResponseEntity<ResSentenceListDto> getSentence(@RequestParam SentenceTypes sentenceTypes,
-                                                          @RequestParam LevelTypes levelTypes,
-                                                          @RequestParam NumTypes numTypes) {
+                                                            @RequestParam LevelTypes levelTypes,
+                                                            @RequestParam NumTypes numTypes) {
         return new ResponseEntity<>(checkService.getSentence(sentenceTypes, levelTypes, numTypes), HttpStatus.OK);
     }
 

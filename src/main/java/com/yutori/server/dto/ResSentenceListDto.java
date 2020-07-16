@@ -2,9 +2,9 @@ package com.yutori.server.dto;
 
 import lombok.Data;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ResSentenceListDto {
-    private ArrayList<ResSentenceDto> resSentenceDtoArrayList;
+    private List<ResSentenceDto> resSentenceDtoList;
 }
