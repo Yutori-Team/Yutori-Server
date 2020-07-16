@@ -2,10 +2,7 @@ package com.yutori.server.service.impl;
 
 import com.opencsv.CSVReader;
 import com.yutori.server.domain.Sentence;
-import com.yutori.server.dto.LevelTypes;
-import com.yutori.server.dto.NumTypes;
-import com.yutori.server.dto.ResSentenceListDto;
-import com.yutori.server.dto.SentenceTypes;
+import com.yutori.server.dto.*;
 import com.yutori.server.repository.SentenceRepository;
 import com.yutori.server.service.CheckService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,9 +22,13 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public ResSentenceListDto getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes) {
+        List<ResSentenceDto> resSentenceDtos = sentenceRepository.findAllBySentenceTypesAndLevelTypesAndNumTypes(sentenceTypes, levelTypes, numTypes)
+                .stream()
+                .map(ResSentenceDto::from)
+                .collect(Collectors.toList());
+
         ResSentenceListDto resSentenceListDto = new ResSentenceListDto();
-        List<Sentence> sentence = sentenceRepository.findAllBySentenceTypesAndLevelTypesAndNumTypes(sentenceTypes.toString(), levelTypes.toString(), numTypes.toString());
-        // sentence -> resSentenceListDto
+        resSentenceListDto.setResSentenceDtoList(resSentenceDtos);
 
         return resSentenceListDto;
     }
