@@ -1,11 +1,10 @@
 package com.yutori.server.service;
 
-import com.yutori.server.dto.LevelTypes;
-import com.yutori.server.dto.NumTypes;
-import com.yutori.server.dto.ResSentenceListDto;
-import com.yutori.server.dto.SentenceTypes;
+import com.yutori.server.dto.*;
 
 public interface CheckService {
-    ResSentenceListDto getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes);
     void saveSentence();
+    ResSentenceListDto getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes);
+    ResCheckListDto checkSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes, Long userId, ReqCheckListDto reqCheckListDto);
+    ResWrongDto wrongSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes, Long userId, Integer sentenceNum);
 }
