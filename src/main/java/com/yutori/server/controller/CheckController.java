@@ -20,9 +20,9 @@ public class CheckController {
     private final CheckService checkService;
 
     @ApiOperation("")
-    @GetMapping("/saveSentence")
-    public ResponseEntity<String> saveSentence() {
-        checkService.saveSentence();
+    @GetMapping("/loadSentence")
+    public ResponseEntity<String> loadSentence() {
+        checkService.loadSentence();
         return new ResponseEntity<>("db에 문장 저장", HttpStatus.OK);
     }
 
