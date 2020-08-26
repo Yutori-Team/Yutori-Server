@@ -5,7 +5,7 @@ import com.yutori.server.dto.ReqLoginDto;
 import com.yutori.server.dto.ReqSignupDto;
 import com.yutori.server.dto.ResLoginDto;
 import com.yutori.server.dto.ResSignupDto;
-import com.yutori.server.exception.MemberAlreadyExistException;
+import com.yutori.server.exception.MemberAlreadyException;
 import com.yutori.server.exception.MemberNotFoundException;
 import com.yutori.server.repository.MemberRepository;
 import com.yutori.server.service.JwtService;
@@ -49,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void checkId(String id) {
         if(memberRepository.findByUserId(id).isPresent()){
-            throw new MemberAlreadyExistException();
+            throw new MemberAlreadyException();
         }
     }
 

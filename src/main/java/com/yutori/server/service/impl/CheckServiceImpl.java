@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -26,28 +25,24 @@ public class CheckServiceImpl implements CheckService {
 
     private final SentenceRepository sentenceRepository;
     private final WrongAnswerRepository wrongAnswerRepository;
-    private final static String DUST_TEXT="[\\s\u0000]+";
-
-    @Value("${data.sentence}")
-    private final String dataFilePath;
 
     @Override
-    public void loadSentence() {
+    public void saveSentence() {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(dataFilePath)), "euc-kr"));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File("src/main/java/com/yutori/server/util/sentence/sentence_list.csv")), "euc-kr"));
             CSVReader reader = new CSVReader(bufferedReader);
             List<String[]> list = reader.readAll();
 
-            for (String[] word : list) {
-                word[1] = word[1].replaceAll(DUST_TEXT, "");
-                word[2] = word[2].replaceAll(DUST_TEXT, "");
-                word[3] = word[3].replaceAll(DUST_TEXT, "");
+            for (String[] str : list) {
+                str[1] = str[1].replaceAll("[\\s\u0000]+", "");
+                str[2] = str[2].replaceAll("[\\s\u0000]+", "");
+                str[3] = str[3].replaceAll("[\\s\u0000]+", "");
 
-                SentenceTypes sentenceTypes = SentenceTypes.valueOf(word[1]);
-                LevelTypes levelTypes = LevelTypes.valueOf(word[2]);
-                NumTypes numTypes = NumTypes.valueOf(word[3]);
+                SentenceTypes sentenceTypes = SentenceTypes.valueOf(str[1]);
+                LevelTypes levelTypes = LevelTypes.valueOf(str[2]);
+                NumTypes numTypes = NumTypes.valueOf(str[3]);
 
-                Sentence sentence = Sentence.from(sentenceTypes, levelTypes, numTypes, word[4]);
+                Sentence sentence = Sentence.from(sentenceTypes, levelTypes, numTypes, str[4]);
                 sentenceRepository.save(sentence);
             }
         } catch (IOException e) {

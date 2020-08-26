@@ -30,4 +30,3 @@ out/
 
 ### VS Code ###
 .vscode/
-src/main/java/com/yutori/server/data/sentence_list.csv
