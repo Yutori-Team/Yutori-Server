@@ -8,10 +8,12 @@ import com.yutori.server.exception.WrongAnswerNotFoundException;
 import com.yutori.server.repository.SentenceRepository;
 import com.yutori.server.repository.WrongAnswerRepository;
 import com.yutori.server.service.CheckService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +30,13 @@ public class CheckServiceImpl implements CheckService {
     private final WrongAnswerRepository wrongAnswerRepository;
     private final static String DUST_TEXT="[\\s\u0000]+";
 
-    @Value("${data.sentence}")
-    private final String dataFilePath;
+//    @Value("${data.sentence}")
+//    private final String dataFilePath;
 
     @Override
     public void loadSentence() {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(dataFilePath)), "euc-kr"));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File("src/main/java/com/yutori/server/data/sentence_list.csv")), "euc-kr"));
             CSVReader reader = new CSVReader(bufferedReader);
             List<String[]> list = reader.readAll();
 
