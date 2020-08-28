@@ -8,35 +8,54 @@ import com.yutori.server.exception.WrongAnswerNotFoundException;
 import com.yutori.server.repository.SentenceRepository;
 import com.yutori.server.repository.WrongAnswerRepository;
 import com.yutori.server.service.CheckService;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+@PropertySource("classpath:sentence.properties")
 public class CheckServiceImpl implements CheckService {
 
-    private final SentenceRepository sentenceRepository;
-    private final WrongAnswerRepository wrongAnswerRepository;
+    private SentenceRepository sentenceRepository;
+    private WrongAnswerRepository wrongAnswerRepository;
     private final static String DUST_TEXT="[\\s\u0000]+";
-
-//    @Value("${data.sentence}")
-//    private final String dataFilePath;
+    
+    @Autowired
+    public void setSentenceRepository(SentenceRepository sentenceRepository) {
+        this.sentenceRepository = sentenceRepository;
+    }
+    
+    @Autowired
+    public void setWrongAnswerRepository(WrongAnswerRepository wrongAnswerRepository) {
+        this.wrongAnswerRepository = wrongAnswerRepository;
+    }
+    
+    @Value("${sentence.file.path}")
+    private String dataFilePath;
 
     @Override
     public void loadSentence() {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File("src/main/java/com/yutori/server/data/sentence_list.csv")), "euc-kr"));
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File("src/main/java/com/yutori/server/data/sentence_list.csv")), "euc-kr"));
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(
+                            new ClassPathResource(dataFilePath).getInputStream(),
+                            "euc-kr"
+                    )
+            );
             CSVReader reader = new CSVReader(bufferedReader);
             List<String[]> list = reader.readAll();
 
