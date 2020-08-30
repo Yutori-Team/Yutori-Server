@@ -7,7 +7,7 @@ import com.yutori.server.dto.*;
 import com.yutori.server.exception.WrongAnswerNotFoundException;
 import com.yutori.server.repository.SentenceRepository;
 import com.yutori.server.repository.WrongAnswerRepository;
-import com.yutori.server.service.CheckService;
+import com.yutori.server.service.SentenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @PropertySource("classpath:sentence.properties")
-public class CheckServiceImpl implements CheckService {
+public class SentenceServiceImpl implements SentenceService {
 
     private SentenceRepository sentenceRepository;
     private WrongAnswerRepository wrongAnswerRepository;

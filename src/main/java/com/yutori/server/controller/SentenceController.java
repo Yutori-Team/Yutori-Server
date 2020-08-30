@@ -1,7 +1,7 @@
 package com.yutori.server.controller;
 
 import com.yutori.server.dto.*;
-import com.yutori.server.service.CheckService;
+import com.yutori.server.service.SentenceService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/check")
 @RequiredArgsConstructor
-public class CheckController {
+public class SentenceController {
 
-    private final CheckService checkService;
+    private final SentenceService checkService;
 
     @ApiOperation("")
     @GetMapping("/loadSentence")
