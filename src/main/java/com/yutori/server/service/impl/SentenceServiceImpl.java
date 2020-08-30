@@ -7,7 +7,7 @@ import com.yutori.server.dto.*;
 import com.yutori.server.exception.WrongAnswerNotFoundException;
 import com.yutori.server.repository.SentenceRepository;
 import com.yutori.server.repository.WrongAnswerRepository;
-import com.yutori.server.service.CheckService;
+import com.yutori.server.service.SentenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,9 +25,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-//@RequiredArgsConstructor
 @PropertySource("classpath:sentence.properties")
-public class CheckServiceImpl implements CheckService {
+public class SentenceServiceImpl implements SentenceService {
 
     private SentenceRepository sentenceRepository;
     private WrongAnswerRepository wrongAnswerRepository;
@@ -49,7 +48,6 @@ public class CheckServiceImpl implements CheckService {
     @Override
     public void loadSentence() {
         try {
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File("src/main/java/com/yutori/server/data/sentence_list.csv")), "euc-kr"));
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(
                             new ClassPathResource(dataFilePath).getInputStream(),
@@ -77,21 +75,20 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResSentenceListDto getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes) {
+    public List<ResSentenceDto> getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes) {
         List<ResSentenceDto> resSentenceDtos = sentenceRepository.findAllBySentenceTypesAndLevelTypesAndNumTypes(sentenceTypes, levelTypes, numTypes)
                 .stream()
                 .map(ResSentenceDto::from)
                 .collect(Collectors.toList());
 
-        ResSentenceListDto resSentenceListDto = new ResSentenceListDto();
-        resSentenceListDto.setResSentenceDtoList(resSentenceDtos);
-
-        return resSentenceListDto;
+        return resSentenceDtos;
     }
 
     @Override
-    public ResCheckListDto checkSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes, Long userId, ReqCheckListDto reqCheckListDto) {
-        ResSentenceListDto resSentenceListDto = getSentence(sentenceTypes, levelTypes, numTypes);
+    public ResCheckListDto checkSentence(ReqCheckSentenceDto reqCheckListDto) {
+        List<ResSentenceDto> resSentenceDtos = getSentence(reqCheckListDto.getSentenceTypes(), reqCheckListDto.getLevelTypes(), reqCheckListDto.getNumTypes());
+        ResSentenceListDto resSentenceListDto = new ResSentenceListDto();
+        resSentenceListDto.setResSentenceDtoList(resSentenceDtos);
 
         JSONObject reqObject = new JSONObject(reqCheckListDto);
         JSONArray reqArray = reqObject.getJSONArray("reqCheckDtoList");
@@ -105,6 +102,7 @@ public class CheckServiceImpl implements CheckService {
         for (int i = 0; i < 10; i++) {
             String reqSentence = reqArray.getJSONObject(i).getString("sentence");
             String answerSentence = answerArray.getJSONObject(i).getString("sentence");
+            Long sentenceId = answerArray.getJSONObject(i).getLong("sentenceId");
 
             ResCheckDto resCheckDto = new ResCheckDto();
             resCheckDto.setSentence(reqSentence);
@@ -112,9 +110,11 @@ public class CheckServiceImpl implements CheckService {
             if (reqSentence.equals(answerSentence)) {
                 score += 10;
                 resCheckDto.setMatch(true);
+                resCheckDto.setSentenceId(sentenceId);
             } else {
                 resCheckDto.setMatch(false);
-                WrongAnswer wrongAnswer = WrongAnswer.from(userId, sentenceTypes, levelTypes, numTypes, i + 1, reqSentence, answerSentence);
+                resCheckDto.setSentenceId(sentenceId);
+                WrongAnswer wrongAnswer = WrongAnswer.from(reqCheckListDto.getUserId(), sentenceId, reqSentence, answerSentence);
                 wrongAnswerRepository.save(wrongAnswer);
             }
             resCheckListDto.addCheckDto(resCheckDto);
@@ -126,8 +126,8 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResWrongDto wrongSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes, Long userId, Integer sentenceNum) {
-        WrongAnswer wrongAnswer = wrongAnswerRepository.findBySentenceTypesAndLevelTypesAndNumTypesAndUserIdAndSentenceNum(sentenceTypes, levelTypes, numTypes, userId, sentenceNum).orElseThrow(WrongAnswerNotFoundException::new);
+    public ResWrongDto wrongSentence(Long userId, Long sentenceId) {
+        WrongAnswer wrongAnswer = wrongAnswerRepository.findByUserIdAndSentenceId(userId, sentenceId).orElseThrow(WrongAnswerNotFoundException::new);
         return ResWrongDto.from(wrongAnswer);
     }
 }

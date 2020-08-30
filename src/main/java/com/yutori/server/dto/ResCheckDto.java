@@ -6,4 +6,5 @@ import lombok.Data;
 public class ResCheckDto {
     private String sentence;
     private Boolean match;
+    private Long sentenceId;
 }

@@ -1,18 +1,29 @@
-spring.datasource.platform=h2
-spring.datasource.url=jdbc:h2:~/h2-console
-spring.datasource.username=yutori
-spring.datasource.password=yutori
-spring.datasource.driverClassName=org.h2.Driver
-spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring:
+  datasource:
+    url: jdbc:h2:~/h2-console
+    driver-class-name: org.h2.Driver
+    username: team5
+    password: team5
+    platform: h2
 
-spring.h2.console.enabled=true
-spring.h2.console.settings.web-allow-others=true
-spring.h2.console.path=/yutori
-#
-#spring.jpa.hibernate.ddl-auto=create
-#spring.jpa.properties.hibernate.show_sql=true
-#spring.jpa.properties.hibernate.use_sql_comments=true
-#spring.jpa.properties.hibernate.format_sql=true
-#spring.jpa.open-in-view=true
-#spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
-#spring.main.allow-bean-definition-overriding=true
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /yutori
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: true
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
+        enable_lazy_load_no_trans: true
+    hibernate:
+      ddl-auto: create
+
+  main:
+    allow-bean-definition-overriding: true
