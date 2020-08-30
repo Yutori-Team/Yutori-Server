@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-//@RequiredArgsConstructor
 @PropertySource("classpath:sentence.properties")
 public class CheckServiceImpl implements CheckService {
 
@@ -49,7 +48,6 @@ public class CheckServiceImpl implements CheckService {
     @Override
     public void loadSentence() {
         try {
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File("src/main/java/com/yutori/server/data/sentence_list.csv")), "euc-kr"));
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(
                             new ClassPathResource(dataFilePath).getInputStream(),
@@ -77,21 +75,20 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResSentenceListDto getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes) {
+    public List<ResSentenceDto> getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes) {
         List<ResSentenceDto> resSentenceDtos = sentenceRepository.findAllBySentenceTypesAndLevelTypesAndNumTypes(sentenceTypes, levelTypes, numTypes)
                 .stream()
                 .map(ResSentenceDto::from)
                 .collect(Collectors.toList());
 
-        ResSentenceListDto resSentenceListDto = new ResSentenceListDto();
-        resSentenceListDto.setResSentenceDtoList(resSentenceDtos);
-
-        return resSentenceListDto;
+        return resSentenceDtos;
     }
 
     @Override
     public ResCheckListDto checkSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes, Long userId, ReqCheckListDto reqCheckListDto) {
-        ResSentenceListDto resSentenceListDto = getSentence(sentenceTypes, levelTypes, numTypes);
+        List<ResSentenceDto> resSentenceDtos = getSentence(sentenceTypes, levelTypes, numTypes);
+        ResSentenceListDto resSentenceListDto = new ResSentenceListDto();
+        resSentenceListDto.setResSentenceDtoList(resSentenceDtos);
 
         JSONObject reqObject = new JSONObject(reqCheckListDto);
         JSONArray reqArray = reqObject.getJSONArray("reqCheckDtoList");

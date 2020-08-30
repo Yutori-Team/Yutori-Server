@@ -28,7 +28,7 @@ public class CheckController {
 
     @ApiOperation("")
     @GetMapping("/getSentence")
-    public ResponseEntity<ResSentenceListDto> getSentence(@RequestParam SentenceTypes sentenceTypes,
+    public ResponseEntity<List<ResSentenceDto>> getSentence(@RequestParam SentenceTypes sentenceTypes,
                                                           @RequestParam LevelTypes levelTypes,
                                                           @RequestParam NumTypes numTypes) {
         return new ResponseEntity<>(checkService.getSentence(sentenceTypes, levelTypes, numTypes), HttpStatus.OK);
