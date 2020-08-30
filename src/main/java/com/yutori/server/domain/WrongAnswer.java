@@ -2,6 +2,7 @@ package com.yutori.server.domain;
 
 import com.yutori.server.dto.LevelTypes;
 import com.yutori.server.dto.NumTypes;
+import com.yutori.server.dto.ReqCheckSentenceDto;
 import com.yutori.server.dto.SentenceTypes;
 import lombok.Data;
 
@@ -32,13 +33,13 @@ public class WrongAnswer {
 
     private String answer;
 
-    public static WrongAnswer from(Long userId, SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes,
+    public static WrongAnswer from(ReqCheckSentenceDto reqCheckListDto,
                                    Integer sentenceNum, String mySentence, String answer) {
         WrongAnswer wrongAnswer = new WrongAnswer();
-        wrongAnswer.userId = userId;
-        wrongAnswer.sentenceTypes = sentenceTypes;
-        wrongAnswer.levelTypes = levelTypes;
-        wrongAnswer.numTypes = numTypes;
+        wrongAnswer.userId = reqCheckListDto.getUserId();
+        wrongAnswer.sentenceTypes = reqCheckListDto.getSentenceTypes();
+        wrongAnswer.levelTypes = reqCheckListDto.getLevelTypes();
+        wrongAnswer.numTypes = reqCheckListDto.getNumTypes();
         wrongAnswer.sentenceNum = sentenceNum;
         wrongAnswer.mySentence = mySentence;
         wrongAnswer.answer = answer;

@@ -36,12 +36,8 @@ public class CheckController {
 
     @ApiOperation("")
     @PostMapping("/checkSentence")
-    public ResponseEntity<ResCheckListDto> checkSentence(@RequestParam SentenceTypes sentenceTypes,
-                                                         @RequestParam LevelTypes levelTypes,
-                                                         @RequestParam NumTypes numTypes,
-                                                         @RequestParam Long userId,
-                                                         @RequestBody ReqCheckListDto reqCheckListDto) {
-        return new ResponseEntity<>(checkService.checkSentence(sentenceTypes, levelTypes, numTypes, userId, reqCheckListDto), HttpStatus.OK);
+    public ResponseEntity<ResCheckListDto> checkSentence(@RequestBody ReqCheckSentenceDto reqCheckListDto) {
+        return new ResponseEntity<>(checkService.checkSentence(reqCheckListDto), HttpStatus.OK);
     }
 
     @ApiOperation("")

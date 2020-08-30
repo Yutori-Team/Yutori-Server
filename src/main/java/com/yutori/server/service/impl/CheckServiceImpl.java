@@ -85,8 +85,8 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResCheckListDto checkSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes, Long userId, ReqCheckListDto reqCheckListDto) {
-        List<ResSentenceDto> resSentenceDtos = getSentence(sentenceTypes, levelTypes, numTypes);
+    public ResCheckListDto checkSentence(ReqCheckSentenceDto reqCheckListDto) {
+        List<ResSentenceDto> resSentenceDtos = getSentence(reqCheckListDto.getSentenceTypes(), reqCheckListDto.getLevelTypes(), reqCheckListDto.getNumTypes());
         ResSentenceListDto resSentenceListDto = new ResSentenceListDto();
         resSentenceListDto.setResSentenceDtoList(resSentenceDtos);
 
@@ -111,7 +111,7 @@ public class CheckServiceImpl implements CheckService {
                 resCheckDto.setMatch(true);
             } else {
                 resCheckDto.setMatch(false);
-                WrongAnswer wrongAnswer = WrongAnswer.from(userId, sentenceTypes, levelTypes, numTypes, i + 1, reqSentence, answerSentence);
+                WrongAnswer wrongAnswer = WrongAnswer.from(reqCheckListDto, i + 1, reqSentence, answerSentence);
                 wrongAnswerRepository.save(wrongAnswer);
             }
             resCheckListDto.addCheckDto(resCheckDto);
