@@ -102,6 +102,7 @@ public class CheckServiceImpl implements CheckService {
         for (int i = 0; i < 10; i++) {
             String reqSentence = reqArray.getJSONObject(i).getString("sentence");
             String answerSentence = answerArray.getJSONObject(i).getString("sentence");
+            Long sentenceId = answerArray.getJSONObject(i).getLong("sentenceId");
 
             ResCheckDto resCheckDto = new ResCheckDto();
             resCheckDto.setSentence(reqSentence);
@@ -109,9 +110,11 @@ public class CheckServiceImpl implements CheckService {
             if (reqSentence.equals(answerSentence)) {
                 score += 10;
                 resCheckDto.setMatch(true);
+                resCheckDto.setSentenceId(sentenceId);
             } else {
                 resCheckDto.setMatch(false);
-                WrongAnswer wrongAnswer = WrongAnswer.from(reqCheckListDto, i + 1, reqSentence, answerSentence);
+                resCheckDto.setSentenceId(sentenceId);
+                WrongAnswer wrongAnswer = WrongAnswer.from(reqCheckListDto.getUserId(), sentenceId, reqSentence, answerSentence);
                 wrongAnswerRepository.save(wrongAnswer);
             }
             resCheckListDto.addCheckDto(resCheckDto);
@@ -123,8 +126,8 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public ResWrongDto wrongSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes, Long userId, Integer sentenceNum) {
-        WrongAnswer wrongAnswer = wrongAnswerRepository.findBySentenceTypesAndLevelTypesAndNumTypesAndUserIdAndSentenceNum(sentenceTypes, levelTypes, numTypes, userId, sentenceNum).orElseThrow(WrongAnswerNotFoundException::new);
+    public ResWrongDto wrongSentence(Long userId, Long sentenceId) {
+        WrongAnswer wrongAnswer = wrongAnswerRepository.findByUserIdAndSentenceId(userId, sentenceId).orElseThrow(WrongAnswerNotFoundException::new);
         return ResWrongDto.from(wrongAnswer);
     }
 }

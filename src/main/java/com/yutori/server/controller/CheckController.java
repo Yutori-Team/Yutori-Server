@@ -42,12 +42,9 @@ public class CheckController {
 
     @ApiOperation("")
     @GetMapping("/wrongSentence")
-    public ResponseEntity<ResWrongDto> wrongSentence(@RequestParam SentenceTypes sentenceTypes,
-                                                     @RequestParam LevelTypes levelTypes,
-                                                     @RequestParam NumTypes numTypes,
-                                                     @RequestParam Long userId,
-                                                     @RequestParam Integer sentenceNum) {
-        return new ResponseEntity<>(checkService.wrongSentence(sentenceTypes, levelTypes, numTypes, userId, sentenceNum), HttpStatus.OK);
+    public ResponseEntity<ResWrongDto> wrongSentence(@RequestParam Long userId,
+                                                     @RequestParam Long sentenceId) {
+        return new ResponseEntity<>(checkService.wrongSentence(userId, sentenceId), HttpStatus.OK);
     }
 
 }

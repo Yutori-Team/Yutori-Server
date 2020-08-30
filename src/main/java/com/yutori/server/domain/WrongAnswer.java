@@ -1,9 +1,5 @@
 package com.yutori.server.domain;
 
-import com.yutori.server.dto.LevelTypes;
-import com.yutori.server.dto.NumTypes;
-import com.yutori.server.dto.ReqCheckSentenceDto;
-import com.yutori.server.dto.SentenceTypes;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,29 +14,17 @@ public class WrongAnswer {
 
     private Long userId;
 
-    @Enumerated(value = EnumType.STRING)
-    private SentenceTypes sentenceTypes;
-
-    @Enumerated(value = EnumType.STRING)
-    private LevelTypes levelTypes;
-
-    @Enumerated(value = EnumType.STRING)
-    private NumTypes numTypes;
-
-    private Integer sentenceNum;
+    private Long sentenceId;
 
     private String mySentence;
 
     private String answer;
 
-    public static WrongAnswer from(ReqCheckSentenceDto reqCheckListDto,
-                                   Integer sentenceNum, String mySentence, String answer) {
+    public static WrongAnswer from(Long userId,
+                                   Long sentenceId, String mySentence, String answer) {
         WrongAnswer wrongAnswer = new WrongAnswer();
-        wrongAnswer.userId = reqCheckListDto.getUserId();
-        wrongAnswer.sentenceTypes = reqCheckListDto.getSentenceTypes();
-        wrongAnswer.levelTypes = reqCheckListDto.getLevelTypes();
-        wrongAnswer.numTypes = reqCheckListDto.getNumTypes();
-        wrongAnswer.sentenceNum = sentenceNum;
+        wrongAnswer.userId = userId;
+        wrongAnswer.sentenceId = sentenceId;
         wrongAnswer.mySentence = mySentence;
         wrongAnswer.answer = answer;
         return wrongAnswer;

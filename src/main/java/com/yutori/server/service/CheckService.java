@@ -8,5 +8,5 @@ public interface CheckService {
     void loadSentence();
     List<ResSentenceDto> getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes);
     ResCheckListDto checkSentence(ReqCheckSentenceDto reqCheckListDto);
-    ResWrongDto wrongSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes, Long userId, Integer sentenceNum);
+    ResWrongDto wrongSentence(Long userId, Long sentenceId);
 }
