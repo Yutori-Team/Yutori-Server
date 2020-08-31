@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 @PropertySource("classpath:sentence.properties")
 public class SentenceServiceImpl implements SentenceService {
 
@@ -86,6 +88,8 @@ public class SentenceServiceImpl implements SentenceService {
 
     @Override
     public ResCheckListDto checkSentence(ReqCheckSentenceDto reqCheckListDto) {
+        deletePrevWrong(reqCheckListDto);
+
         List<ResSentenceDto> resSentenceDtos = getSentence(reqCheckListDto.getSentenceTypes(), reqCheckListDto.getLevelTypes(), reqCheckListDto.getNumTypes());
         ResSentenceListDto resSentenceListDto = new ResSentenceListDto();
         resSentenceListDto.setResSentenceDtoList(resSentenceDtos);
@@ -123,6 +127,16 @@ public class SentenceServiceImpl implements SentenceService {
         resCheckListDto.setScore(score);
 
         return resCheckListDto;
+    }
+
+    private void deletePrevWrong(ReqCheckSentenceDto reqCheckListDto) {
+        List<ResSentenceDto> resSentenceDtos = getSentence(reqCheckListDto.getSentenceTypes(), reqCheckListDto.getLevelTypes(), reqCheckListDto.getNumTypes());
+
+        for(int i = 0; i < 10; i++) {
+            Long sentenceId = resSentenceDtos.get(i).getSentenceId();
+            wrongAnswerRepository.deleteByUserIdAndSentenceId(reqCheckListDto.getUserId(), sentenceId);
+        }
+
     }
 
     @Override
