@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface WrongAnswerRepository extends JpaRepository<WrongAnswer, Long> {
     Optional<WrongAnswer> findByUserIdAndSentenceId(Long userId, Long sentenceId);
+    void deleteByUserIdAndSentenceId(Long userId, Long sentenceId);
 
 }
