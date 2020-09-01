@@ -20,7 +20,6 @@ public class SentenceController {
 
     private final SentenceService checkService;
 
-    @Auth
     @GetMapping("/loadSentence")
     public ResponseEntity<String> loadSentence() {
         checkService.loadSentence();
