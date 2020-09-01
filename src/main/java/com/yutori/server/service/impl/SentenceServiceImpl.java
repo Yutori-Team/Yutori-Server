@@ -17,6 +17,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.runtime.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -91,22 +92,15 @@ public class SentenceServiceImpl implements SentenceService {
         deletePrevWrong(reqCheckListDto);
 
         List<ResSentenceDto> resSentenceDtos = getSentence(reqCheckListDto.getSentenceTypes(), reqCheckListDto.getLevelTypes(), reqCheckListDto.getNumTypes());
-        ResSentenceListDto resSentenceListDto = new ResSentenceListDto();
-        resSentenceListDto.setResSentenceDtoList(resSentenceDtos);
-
-        JSONObject reqObject = new JSONObject(reqCheckListDto);
-        JSONArray reqArray = reqObject.getJSONArray("reqCheckDtoList");
-
-        JSONObject answerObject = new JSONObject(resSentenceListDto);
-        JSONArray answerArray = answerObject.getJSONArray("resSentenceDtoList");
+        List<ReqCheckDto> reqCheckDtoList = reqCheckListDto.getReqCheckDtoList();
 
         ResCheckListDto resCheckListDto = new ResCheckListDto();
         Integer score = 0;
 
         for (int i = 0; i < 10; i++) {
-            String reqSentence = reqArray.getJSONObject(i).getString("sentence");
-            String answerSentence = answerArray.getJSONObject(i).getString("sentence");
-            Long sentenceId = answerArray.getJSONObject(i).getLong("sentenceId");
+            String reqSentence = reqCheckDtoList.get(i).getSentence();
+            String answerSentence = resSentenceDtos.get(i).getSentence();
+            Long sentenceId = resSentenceDtos.get(i).getSentenceId();
 
             ResCheckDto resCheckDto = new ResCheckDto();
             resCheckDto.setSentence(reqSentence);

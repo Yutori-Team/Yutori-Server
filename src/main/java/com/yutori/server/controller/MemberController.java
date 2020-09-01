@@ -3,7 +3,6 @@ package com.yutori.server.controller;
 import com.yutori.server.dto.ReqLoginDto;
 import com.yutori.server.dto.ReqSignupDto;
 import com.yutori.server.dto.ResLoginDto;
-import com.yutori.server.dto.ResSignupDto;
 import com.yutori.server.service.MemberService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +21,9 @@ public class MemberController {
 
     @ApiOperation("회원을 생성합니다.")
     @PostMapping("/signup")
-    public ResponseEntity<ResSignupDto> signup(@RequestBody ReqSignupDto reqSignupDto) {
-        return new ResponseEntity<>(memberService.signup(reqSignupDto), HttpStatus.OK);
+    public ResponseEntity<String> signup(@RequestBody ReqSignupDto reqSignupDto) {
+        memberService.signup(reqSignupDto);
+        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
 
     @ApiOperation("로그인하여 토큰을 발급받습니다.")

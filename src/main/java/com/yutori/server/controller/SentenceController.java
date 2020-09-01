@@ -2,6 +2,7 @@ package com.yutori.server.controller;
 
 import com.yutori.server.dto.*;
 import com.yutori.server.service.SentenceService;
+import com.yutori.server.util.auth.Auth;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +20,14 @@ public class SentenceController {
 
     private final SentenceService checkService;
 
-    @ApiOperation("")
+    @Auth
     @GetMapping("/loadSentence")
     public ResponseEntity<String> loadSentence() {
         checkService.loadSentence();
         return new ResponseEntity<>("db에 문장 저장", HttpStatus.OK);
     }
 
+    @Auth
     @ApiOperation("")
     @GetMapping("/getSentence")
     public ResponseEntity<List<ResSentenceDto>> getSentence(@RequestParam SentenceTypes sentenceTypes,
@@ -34,13 +36,13 @@ public class SentenceController {
         return new ResponseEntity<>(checkService.getSentence(sentenceTypes, levelTypes, numTypes), HttpStatus.OK);
     }
 
-    @ApiOperation("")
+    @Auth
     @PostMapping("/checkSentence")
     public ResponseEntity<ResCheckListDto> checkSentence(@RequestBody ReqCheckSentenceDto reqCheckListDto) {
         return new ResponseEntity<>(checkService.checkSentence(reqCheckListDto), HttpStatus.OK);
     }
 
-    @ApiOperation("")
+    @Auth
     @GetMapping("/wrongSentence")
     public ResponseEntity<ResWrongDto> wrongSentence(@RequestParam Long userId,
                                                      @RequestParam Long sentenceId) {

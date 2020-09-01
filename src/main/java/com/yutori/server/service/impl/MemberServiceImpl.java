@@ -4,15 +4,17 @@ import com.yutori.server.domain.Member;
 import com.yutori.server.dto.ReqLoginDto;
 import com.yutori.server.dto.ReqSignupDto;
 import com.yutori.server.dto.ResLoginDto;
-import com.yutori.server.dto.ResSignupDto;
 import com.yutori.server.exception.MemberAlreadyExistException;
 import com.yutori.server.exception.MemberNotFoundException;
+import com.yutori.server.exception.WrongPasswordException;
 import com.yutori.server.repository.MemberRepository;
 import com.yutori.server.service.JwtService;
 import com.yutori.server.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -23,15 +25,16 @@ public class MemberServiceImpl implements MemberService {
     private final JwtService jwtService;
 
     @Override
-    public ResSignupDto signup(ReqSignupDto reqSignupDto) {
+    public void signup(ReqSignupDto reqSignupDto) {
+        checkId(reqSignupDto.getId());
+
+        boolean validationPw = Pattern.matches("^(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,20}$", reqSignupDto.getPw());
+        if (!validationPw) {
+            throw new WrongPasswordException();
+        }
+
         Member member = Member.from(reqSignupDto);
         memberRepository.save(member);
-
-        JwtService.TokenRes token = new JwtService.TokenRes(jwtService.create(member.getId()));
-        ResSignupDto resSignupDto = new ResSignupDto();
-        resSignupDto.setId(member.getId());
-        resSignupDto.setToken(token.getToken());
-        return resSignupDto;
     }
 
     @Override
