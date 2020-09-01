@@ -1,10 +1,14 @@
 package com.yutori.server.service.impl;
 
 import com.opencsv.CSVReader;
+import com.yutori.server.domain.ExamRecord;
+import com.yutori.server.domain.PracticeRecord;
 import com.yutori.server.domain.Sentence;
 import com.yutori.server.domain.WrongAnswer;
 import com.yutori.server.dto.*;
 import com.yutori.server.exception.WrongAnswerNotFoundException;
+import com.yutori.server.repository.ExamRecordRepository;
+import com.yutori.server.repository.PracticeRecordRepository;
 import com.yutori.server.repository.SentenceRepository;
 import com.yutori.server.repository.WrongAnswerRepository;
 import com.yutori.server.service.SentenceService;
@@ -33,6 +37,8 @@ public class SentenceServiceImpl implements SentenceService {
 
     private SentenceRepository sentenceRepository;
     private WrongAnswerRepository wrongAnswerRepository;
+    private ExamRecordRepository examRecordRepository;
+    private PracticeRecordRepository practiceRecordRepository;
     private final static String DUST_TEXT="[\\s\u0000]+";
     
     @Autowired
@@ -43,6 +49,16 @@ public class SentenceServiceImpl implements SentenceService {
     @Autowired
     public void setWrongAnswerRepository(WrongAnswerRepository wrongAnswerRepository) {
         this.wrongAnswerRepository = wrongAnswerRepository;
+    }
+
+    @Autowired
+    public void setExamRecordRepository(ExamRecordRepository examRecordRepository) {
+        this.examRecordRepository = examRecordRepository;
+    }
+
+    @Autowired
+    public void setPracticeRecordRepository(PracticeRecordRepository practiceRecordRepository) {
+        this.practiceRecordRepository = practiceRecordRepository;
     }
     
     @Value("${sentence.file.path}")
@@ -120,6 +136,8 @@ public class SentenceServiceImpl implements SentenceService {
         }
         resCheckListDto.setScore(score);
 
+        saveExamRecord(reqCheckListDto, score);
+
         return resCheckListDto;
     }
 
@@ -130,12 +148,24 @@ public class SentenceServiceImpl implements SentenceService {
             Long sentenceId = resSentenceDtos.get(i).getSentenceId();
             wrongAnswerRepository.deleteByUserIdAndSentenceId(reqCheckListDto.getUserId(), sentenceId);
         }
-
     }
+
+    private void saveExamRecord(ReqCheckSentenceDto reqCheckListDto, Integer score) {
+        ExamRecord examRecord = ExamRecord.from(reqCheckListDto, score);
+        examRecordRepository.save(examRecord);
+    }
+
 
     @Override
     public ResWrongDto wrongSentence(Long userId, Long sentenceId) {
         WrongAnswer wrongAnswer = wrongAnswerRepository.findByUserIdAndSentenceId(userId, sentenceId).orElseThrow(WrongAnswerNotFoundException::new);
         return ResWrongDto.from(wrongAnswer);
     }
+
+    @Override
+    public void savePractice(ReqSavePracticeDto reqSavePracticeDto) {
+        PracticeRecord practiceRecord = PracticeRecord.from(reqSavePracticeDto);
+        practiceRecordRepository.save(practiceRecord);
+    }
+
 }

@@ -18,34 +18,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SentenceController {
 
-    private final SentenceService checkService;
+    private final SentenceService sentenceService;
 
     @GetMapping("/loadSentence")
     public ResponseEntity<String> loadSentence() {
-        checkService.loadSentence();
+        sentenceService.loadSentence();
         return new ResponseEntity<>("db에 문장 저장", HttpStatus.OK);
     }
 
     @Auth
-    @ApiOperation("")
     @GetMapping("/getSentence")
     public ResponseEntity<List<ResSentenceDto>> getSentence(@RequestParam SentenceTypes sentenceTypes,
                                                           @RequestParam LevelTypes levelTypes,
                                                           @RequestParam NumTypes numTypes) {
-        return new ResponseEntity<>(checkService.getSentence(sentenceTypes, levelTypes, numTypes), HttpStatus.OK);
+        return new ResponseEntity<>(sentenceService.getSentence(sentenceTypes, levelTypes, numTypes), HttpStatus.OK);
     }
 
     @Auth
     @PostMapping("/checkSentence")
     public ResponseEntity<ResCheckListDto> checkSentence(@RequestBody ReqCheckSentenceDto reqCheckListDto) {
-        return new ResponseEntity<>(checkService.checkSentence(reqCheckListDto), HttpStatus.OK);
+        return new ResponseEntity<>(sentenceService.checkSentence(reqCheckListDto), HttpStatus.OK);
     }
 
     @Auth
     @GetMapping("/wrongSentence")
     public ResponseEntity<ResWrongDto> wrongSentence(@RequestParam Long userId,
                                                      @RequestParam Long sentenceId) {
-        return new ResponseEntity<>(checkService.wrongSentence(userId, sentenceId), HttpStatus.OK);
+        return new ResponseEntity<>(sentenceService.wrongSentence(userId, sentenceId), HttpStatus.OK);
+    }
+
+    @Auth
+    @PostMapping("/savePractice")
+    public ResponseEntity<String> savePractice(@RequestBody ReqSavePracticeDto reqSavePracticeDto){
+        sentenceService.savePractice(reqSavePracticeDto);
+        return new ResponseEntity<>("연습 기록 저장", HttpStatus.OK);
     }
 
 }
