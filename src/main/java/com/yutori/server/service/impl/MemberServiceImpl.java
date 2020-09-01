@@ -6,12 +6,15 @@ import com.yutori.server.dto.ReqSignupDto;
 import com.yutori.server.dto.ResLoginDto;
 import com.yutori.server.exception.MemberAlreadyExistException;
 import com.yutori.server.exception.MemberNotFoundException;
+import com.yutori.server.exception.WrongPasswordException;
 import com.yutori.server.repository.MemberRepository;
 import com.yutori.server.service.JwtService;
 import com.yutori.server.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -23,6 +26,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void signup(ReqSignupDto reqSignupDto) {
+        checkId(reqSignupDto.getId());
+
+        boolean validationPw = Pattern.matches("^(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,20}$", reqSignupDto.getPw());
+        if (!validationPw) {
+            throw new WrongPasswordException();
+        }
+
         Member member = Member.from(reqSignupDto);
         memberRepository.save(member);
     }
