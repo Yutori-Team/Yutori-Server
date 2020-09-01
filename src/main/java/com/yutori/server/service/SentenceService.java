@@ -9,4 +9,5 @@ public interface SentenceService {
     List<ResSentenceDto> getSentence(SentenceTypes sentenceTypes, LevelTypes levelTypes, NumTypes numTypes);
     ResCheckListDto checkSentence(ReqCheckSentenceDto reqCheckListDto);
     ResWrongDto wrongSentence(Long userId, Long sentenceId);
+    void savePractice(ReqSavePracticeDto reqSavePracticeDto);
 }
