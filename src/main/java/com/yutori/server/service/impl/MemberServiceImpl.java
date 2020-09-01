@@ -4,7 +4,6 @@ import com.yutori.server.domain.Member;
 import com.yutori.server.dto.ReqLoginDto;
 import com.yutori.server.dto.ReqSignupDto;
 import com.yutori.server.dto.ResLoginDto;
-import com.yutori.server.dto.ResSignupDto;
 import com.yutori.server.exception.MemberAlreadyExistException;
 import com.yutori.server.exception.MemberNotFoundException;
 import com.yutori.server.repository.MemberRepository;
@@ -23,15 +22,9 @@ public class MemberServiceImpl implements MemberService {
     private final JwtService jwtService;
 
     @Override
-    public ResSignupDto signup(ReqSignupDto reqSignupDto) {
+    public void signup(ReqSignupDto reqSignupDto) {
         Member member = Member.from(reqSignupDto);
         memberRepository.save(member);
-
-        JwtService.TokenRes token = new JwtService.TokenRes(jwtService.create(member.getId()));
-        ResSignupDto resSignupDto = new ResSignupDto();
-        resSignupDto.setId(member.getId());
-        resSignupDto.setToken(token.getToken());
-        return resSignupDto;
     }
 
     @Override
