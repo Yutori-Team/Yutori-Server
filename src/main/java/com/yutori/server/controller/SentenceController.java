@@ -27,7 +27,6 @@ public class SentenceController {
     }
 
     @Auth
-    @ApiOperation("")
     @GetMapping("/getSentence")
     public ResponseEntity<List<ResSentenceDto>> getSentence(@RequestParam SentenceTypes sentenceTypes,
                                                           @RequestParam LevelTypes levelTypes,
