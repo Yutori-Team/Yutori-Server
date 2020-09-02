@@ -8,4 +8,5 @@ public interface MemberService {
     void signup(ReqSignupDto reqSignupDto);
     ResLoginDto login(ReqLoginDto reqLoginDto);
     void checkId(String id);
+    void deleteMember(Long userId);
 }
