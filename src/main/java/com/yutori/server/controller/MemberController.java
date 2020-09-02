@@ -4,6 +4,7 @@ import com.yutori.server.dto.ReqLoginDto;
 import com.yutori.server.dto.ReqSignupDto;
 import com.yutori.server.dto.ResLoginDto;
 import com.yutori.server.service.MemberService;
+import com.yutori.server.util.auth.Auth;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,13 @@ public class MemberController {
     public ResponseEntity<String> checkId(@RequestParam String id) {
         memberService.checkId(id);
         return new ResponseEntity<>("id check success", HttpStatus.OK);
+    }
+
+    @Auth
+    @DeleteMapping("/deleteMember")
+    public ResponseEntity<String> deleteMember(@RequestParam Long userId) {
+        memberService.deleteMember(userId);
+        return new ResponseEntity<>("회원 삭제", HttpStatus.OK);
     }
 
 }
