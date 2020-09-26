@@ -46,5 +46,4 @@ public class MemberController {
         memberService.deleteMember(userId);
         return new ResponseEntity<>("회원 삭제", HttpStatus.OK);
     }
-
 }

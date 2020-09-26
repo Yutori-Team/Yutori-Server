@@ -135,9 +135,7 @@ public class SentenceServiceImpl implements SentenceService {
 
         }
         resCheckListDto.setScore(score);
-
         saveExamRecord(reqCheckListDto, score);
-
         return resCheckListDto;
     }
 
@@ -154,7 +152,6 @@ public class SentenceServiceImpl implements SentenceService {
         ExamRecord examRecord = ExamRecord.from(reqCheckListDto, score);
         examRecordRepository.save(examRecord);
     }
-
 
     @Override
     public ResWrongDto wrongSentence(Long userId, Long sentenceId) {
