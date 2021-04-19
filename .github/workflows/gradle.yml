@@ -19,5 +19,5 @@ jobs:
     - name: GCP connect
       uses: google-github-actions/setup-gcloud@master
       with: 
-        service_account_key: ${{ secrets.GCP_KEY }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
         project_id: ${{ secrets.GCP_PROJECT_ID }}
