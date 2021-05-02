@@ -16,6 +16,6 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.GCP_SA_KEY }}
+        key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: whoami
