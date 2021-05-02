@@ -6,18 +6,16 @@ on:
   pull_request:
     branches: [ develop ]
 
-env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GCE_INSTANCE: instance-01	  
-  GCE_INSTANCE_ZONE: asia-northeast3-a	
-  
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: GCP connect
-      uses: google-github-actions/setup-gcloud@master
-      with: 
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+    - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.GCP_SA_KEY }}
+        port: ${{ secrets.PORT }}
+        script: whoami
